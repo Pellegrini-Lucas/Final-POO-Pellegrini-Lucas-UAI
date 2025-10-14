@@ -16,6 +16,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         public string Rubro { get; set; }
         public int Stock { get; set; }
         public bool Activo { get; set; } = true;
+        public int IdRubro { get; set; }
     }
 
 }

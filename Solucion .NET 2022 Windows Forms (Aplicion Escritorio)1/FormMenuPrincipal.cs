@@ -28,5 +28,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             FormGestionarRubro formGestionarRubro = new FormGestionarRubro();
             formGestionarRubro.ShowDialog();
         }
+
+        private void btn_AbrirFormGestionarProveedores_Click(object sender, EventArgs e)
+        {
+            FormGestionarProveedores formGestionarProveedores = new FormGestionarProveedores();
+            formGestionarProveedores.ShowDialog();
+        }
     }
 }

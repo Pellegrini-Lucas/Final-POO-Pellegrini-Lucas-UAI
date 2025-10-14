@@ -18,30 +18,51 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             InitializeComponent();
         }
+        List<Producto> listaProductosMemoria = new List<Producto>();
+        List<Producto> listaProductosMemoriaFiltrada = new List<Producto>();
         List <Rubro> listaRubrosMemoria = new List <Rubro>();
         List<Rubro> listaRubrosMemoriaFiltrada = new List<Rubro>();
+        private void LimpiarCampos()
+        {
+            txt_NombreRubro.Text = "";
+            txt_DescripcionRubro.Text = "";
+        }
         private int GenerarIdProducto()
         {
             if (listaRubrosMemoria.Count == 0)
                 return 1;
             return listaRubrosMemoria.Max(p => p.Id) + 1;
         }
-        private void CargarListaMemoriaFiltrada()
+        private void CargarListaRubrosMemoriaFiltrada()
         {
             if (!File.Exists("Rubros.json"))
             {
-                File.Create("Rubros.json");
+                File.Create("Rubros.json").Close();
             }
-            string JsonString = File.ReadAllText("Rubros.json");
-            if (string.IsNullOrWhiteSpace("Rubros.json"))
-            {
+            string jsonString = File.ReadAllText("Rubros.json");
+            if (string.IsNullOrWhiteSpace(jsonString))
                 listaRubrosMemoria = new List<Rubro>();
-            }
             else
+                listaRubrosMemoria = JsonSerializer.Deserialize<List<Rubro>>(jsonString);
+            listaRubrosMemoriaFiltrada = listaRubrosMemoria.Where(p => p.Activo == true).ToList();
+        }
+        private void AsignarProductosRubro()
+        {
+            if (!File.Exists("productos.json"))
             {
-                listaRubrosMemoria = JsonSerializer.Deserialize<List<Rubro>>(JsonString);
-                listaRubrosMemoriaFiltrada = listaRubrosMemoria.Where(p => p.Activo = true).ToList();
-            }    
+                File.Create("productos.json").Close();
+            }
+            string jsonString = File.ReadAllText("productos.json");
+            if (string.IsNullOrWhiteSpace(jsonString))
+                listaProductosMemoria = new List<Producto>();
+            else
+                listaProductosMemoria = JsonSerializer.Deserialize<List<Producto>>(jsonString);
+            listaProductosMemoriaFiltrada = listaProductosMemoria.Where(p => p.Activo == true).ToList();
+            foreach (Rubro rubro in listaRubrosMemoriaFiltrada)
+            {
+                List<Producto> productosAAsignar = listaProductosMemoriaFiltrada.FindAll(p => p.Rubro == rubro.NombreRubro);
+                rubro.CantidadProductosAsignados = productosAAsignar.Count;
+            }
         }
         private void ActualizarDgv()
         {
@@ -68,37 +89,104 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         }
         private void btn_AgregarRubro_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(txt_DescripcionRubro.Text)||string.IsNullOrEmpty(txt_NombreRubro.Text))
+            {
+                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
+                MessageBox.Show("todos los campos deben estar completos");
+                return;
+            }
             Rubro nuevoRubro = new Rubro();
             nuevoRubro.Id = GenerarIdProducto();
-            nuevoRubro.NombreRubro = txt_NombreRubro.Text;
+            nuevoRubro.NombreRubro = txt_NombreRubro.Text.ToLower();
             nuevoRubro.DescripcionRubro = txt_DescripcionRubro.Text;
             nuevoRubro.CantidadProductosAsignados = 0;
-            listaRubrosMemoria.Add(nuevoRubro);
-            string JsonString = JsonSerializer.Serialize(listaRubrosMemoria);
-            File.WriteAllText("Rubros.json",JsonString);
-            CargarListaMemoriaFiltrada();
-            ActualizarDgv();    
+            //evito que se repitan nombres
+            if (!listaRubrosMemoriaFiltrada.Exists(p => p.NombreRubro == nuevoRubro.NombreRubro))
+            {
+                listaRubrosMemoria.Add(nuevoRubro);
+                string JsonString = JsonSerializer.Serialize(listaRubrosMemoria);
+                File.WriteAllText("Rubros.json", JsonString);
+                CargarListaRubrosMemoriaFiltrada();
+                ActualizarDgv();
+                LimpiarCampos();
+            }
+            else MessageBox.Show($"el Rubro {nuevoRubro.NombreRubro} ya existe");
+                return;
         }
 
         private void btn_ModificarRubro_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(txt_DescripcionRubro.Text) || string.IsNullOrEmpty(txt_NombreRubro.Text))
+            {
+                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
+                MessageBox.Show("todos los campos deben estar completos");
+                return;
+            }
             if (dgv_BancoRubros.SelectedRows != null)
             {
                 int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells["Id"].Value;
                 Rubro rubro = listaRubrosMemoria.FirstOrDefault(p => p.Id == idRubroSeleccionado);
-
+                rubro.DescripcionRubro = txt_DescripcionRubro.Text;
+                if (!listaRubrosMemoriaFiltrada.Exists(p => p.NombreRubro == txt_NombreRubro.Text))
+                {
+                    rubro.NombreRubro = txt_NombreRubro.Text.ToLower();
+                    string jsonString = JsonSerializer.Serialize(listaRubrosMemoria);
+                    File.WriteAllText("Rubros.json", jsonString);
+                    CargarListaRubrosMemoriaFiltrada();
+                    ActualizarDgv();
+                }
+                else MessageBox.Show("El nombre a modificar no puede coincidir con uno ya existente");
+                {
+                    return;
+                }
             }
         }
 
         private void btn_BajaRubro_Click(object sender, EventArgs e)
         {
-
+            if (dgv_BancoRubros.SelectedRows != null)
+            {
+                int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells["Id"].Value;
+                Rubro rubroSeleccionado = listaRubrosMemoria.FirstOrDefault(p => p.Id == idRubroSeleccionado);
+                if (rubroSeleccionado != null)
+                {
+                    if (rubroSeleccionado.CantidadProductosAsignados > 0)
+                    {
+                        MessageBox.Show($"El rubro {rubroSeleccionado.NombreRubro} ya tiene un producto o mas asignados");
+                    }
+                    else
+                    {
+                        rubroSeleccionado.Activo = false;
+                        string jsonString = JsonSerializer.Serialize(listaRubrosMemoria);
+                        File.WriteAllText("Rubros.json", jsonString);
+                        CargarListaRubrosMemoriaFiltrada();
+                        ActualizarDgv();
+                    }
+                }
+            }
         }
 
         private void FormGestionarRubro_Load(object sender, EventArgs e)
         {
-            CargarListaMemoriaFiltrada();
+            CargarListaRubrosMemoriaFiltrada();
+            AsignarProductosRubro();
             ActualizarDgv();
+            LimpiarCampos();      
+        }
+
+        private void dgv_BancoRubros_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgv_BancoRubros.SelectedRows.Count > 0)
+            {
+                if (dgv_BancoRubros.SelectedRows[0].Cells[0].Value == null) return;
+                int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells[0].Value;
+                Rubro rubroSeleccionado = listaRubrosMemoria.FirstOrDefault(p => p.Id == idRubroSeleccionado);
+                if (rubroSeleccionado != null)
+                {
+                    txt_NombreRubro.Text = rubroSeleccionado.NombreRubro;
+                    txt_DescripcionRubro.Text = rubroSeleccionado.DescripcionRubro;
+                }
+            }
         }
     }
 }

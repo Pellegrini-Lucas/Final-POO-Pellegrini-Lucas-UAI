@@ -19,9 +19,28 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
     {
         List<Producto> listaProductosMemoria = new List<Producto>();
         List<Producto> listaProductosMemoriaFiltrada = new List<Producto>();
+        List<Rubro> listaRubrosMemoria = new List<Rubro>();
+        List<Rubro> listaRubrosMemoriaFiltrada = new List<Rubro>();
         public FormGestionarProductos()
         {
             InitializeComponent();
+        }
+        private void CargarCmbRubros()
+        {
+            if (!File.Exists("Rubros.json"))
+            {
+                File.Create("Rubros.json").Close();
+            }
+            string jsonString = File.ReadAllText("Rubros.json");
+            if (string.IsNullOrWhiteSpace(jsonString))
+                listaRubrosMemoria = new List<Rubro>();
+            else
+                listaRubrosMemoria = JsonSerializer.Deserialize<List<Rubro>>(jsonString);
+            listaRubrosMemoriaFiltrada = listaRubrosMemoria.Where(p => p.Activo == true).ToList();
+            foreach (Rubro rubro in listaRubrosMemoriaFiltrada)
+            {
+                cmb_RubroProducto.Items.Add(rubro.NombreRubro);
+            }
         }
         private void dgv_BancoProductos_SelectionChanged(object sender, EventArgs e)
         {
@@ -46,7 +65,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 return 1;
             return listaProductosMemoria.Max(p => p.Id) + 1;
         }
-        public void CargarListaMemoriaFiltrada()
+        private void CargarListaProductosMemoriaFiltrada()
         {
             if (!File.Exists("productos.json"))
             {
@@ -81,6 +100,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         }
         private void ActualizarDgvBancoProductos ()
         {
+
             dgv_BancoProductos.AutoGenerateColumns = false;
             dgv_BancoProductos.Columns.Clear();
             dgv_BancoProductos.ReadOnly = true;
@@ -119,22 +139,46 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         private void FormGestionarProductos_Load(object sender, EventArgs e)
         {
             LimpiarCampos();
-            CargarListaMemoriaFiltrada();
+            CargarListaProductosMemoriaFiltrada();
             ActualizarDgvBancoProductos();
+            CargarListaProductosMemoriaFiltrada();
+            CargarCmbRubros();
         }
         private void btn_AgregarProductos_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(txt_NombreProducto.Text) || string.IsNullOrEmpty(txt_PrecioUnitarioProducto.Text) || string.IsNullOrEmpty(txt_StockProducto.Text) || string.IsNullOrEmpty(txt_DescripcionProducto.Text) || cmb_RubroProducto.SelectedItem == null)
+            {
+                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
+                MessageBox.Show("todos los campos deben estar completos");
+                return;
+            }
             Producto nuevoProducto = new Producto();
             nuevoProducto.Id = GenerarIdProducto();
             nuevoProducto.Nombre = txt_NombreProducto.Text;
             nuevoProducto.Descripcion = txt_DescripcionProducto.Text;
-            nuevoProducto.PrecioUnitario = decimal.Parse(txt_PrecioUnitarioProducto.Text);
             nuevoProducto.Rubro = cmb_RubroProducto.Text;
-            nuevoProducto.Stock = int.Parse(txt_StockProducto.Text);
+            try
+            {
+                nuevoProducto.PrecioUnitario = decimal.Parse(txt_PrecioUnitarioProducto.Text);
+            }
+            catch 
+            {
+                MessageBox.Show("El precio unitario ingresado no es un precio valido");
+                return;
+            }
+            try
+            {
+                nuevoProducto.Stock = int.Parse(txt_StockProducto.Text);
+            }
+            catch
+            {
+                MessageBox.Show("Ingrese una cantidad de stock valida");
+                return;
+            }
             listaProductosMemoria.Add(nuevoProducto);
             string jsonString = JsonSerializer.Serialize(listaProductosMemoria);
             File.WriteAllText("productos.json", jsonString);
-            CargarListaMemoriaFiltrada();
+            CargarListaProductosMemoriaFiltrada();
             ActualizarDgvBancoProductos();
             LimpiarCampos();
         }
@@ -142,18 +186,40 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (dgv_BancoProductos.SelectedRows!=null)
             {
+                if (string.IsNullOrEmpty(txt_NombreProducto.Text) || string.IsNullOrEmpty(txt_PrecioUnitarioProducto.Text) || string.IsNullOrEmpty(txt_StockProducto.Text) || string.IsNullOrEmpty(txt_DescripcionProducto.Text) || cmb_RubroProducto.SelectedItem == null)
+                {
+                    //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
+                    MessageBox.Show("todos los campos deben estar completos");
+                    return;
+                }
                 int idProductoSeleccionado = (int)dgv_BancoProductos.SelectedRows[0].Cells["Id"].Value;
                 Producto productoSeleccionado = listaProductosMemoria.FirstOrDefault(p => p.Id == idProductoSeleccionado);
                 if (productoSeleccionado != null)
                 {
                     productoSeleccionado.Nombre = txt_NombreProducto.Text;
                     productoSeleccionado.Descripcion = txt_DescripcionProducto.Text;
-                    productoSeleccionado.PrecioUnitario = decimal.Parse(txt_PrecioUnitarioProducto.Text);
                     productoSeleccionado.Rubro = cmb_RubroProducto.Text;
-                    productoSeleccionado.Stock = int.Parse(txt_StockProducto.Text);
+                    try
+                    {
+                        productoSeleccionado.PrecioUnitario = decimal.Parse(txt_PrecioUnitarioProducto.Text);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("El precio unitario ingresado no es un precio valido");
+                        return;
+                    }
+                    try
+                    {
+                        productoSeleccionado.Stock = int.Parse(txt_StockProducto.Text);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Ingrese una cantidad de stock valida");
+                        return;
+                    }
                     string jsonString = JsonSerializer.Serialize(listaProductosMemoria);
                     File.WriteAllText("productos.json", jsonString);
-                    CargarListaMemoriaFiltrada();
+                    CargarListaProductosMemoriaFiltrada();
                     ActualizarDgvBancoProductos();
                 }
             }
@@ -169,10 +235,14 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                     productoSeleccionado.Activo = false;
                     string jsonString = JsonSerializer.Serialize(listaProductosMemoria);
                     File.WriteAllText("productos.json", jsonString);
-                    CargarListaMemoriaFiltrada();
+                    CargarListaProductosMemoriaFiltrada();
                     ActualizarDgvBancoProductos();
                 }
             }
         }
     }
 }
+
+
+
+

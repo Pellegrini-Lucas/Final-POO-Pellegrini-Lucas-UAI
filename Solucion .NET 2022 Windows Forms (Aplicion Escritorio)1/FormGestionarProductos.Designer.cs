@@ -43,8 +43,8 @@
             this.btn_BajaProductos = new System.Windows.Forms.Button();
             this.txt_BuscarNombreProducto = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.label6 = new System.Windows.Forms.Label();
             this.cmb_RubroProducto = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_BancoProductos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -207,6 +207,15 @@
             this.splitContainer1.SplitterDistance = 250;
             this.splitContainer1.TabIndex = 15;
             // 
+            // cmb_RubroProducto
+            // 
+            this.cmb_RubroProducto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmb_RubroProducto.FormattingEnabled = true;
+            this.cmb_RubroProducto.Location = new System.Drawing.Point(12, 344);
+            this.cmb_RubroProducto.Name = "cmb_RubroProducto";
+            this.cmb_RubroProducto.Size = new System.Drawing.Size(195, 21);
+            this.cmb_RubroProducto.TabIndex = 16;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -215,14 +224,6 @@
             this.label6.Size = new System.Drawing.Size(40, 13);
             this.label6.TabIndex = 15;
             this.label6.Text = "Buscar";
-            // 
-            // cmb_RubroProducto
-            // 
-            this.cmb_RubroProducto.FormattingEnabled = true;
-            this.cmb_RubroProducto.Location = new System.Drawing.Point(12, 344);
-            this.cmb_RubroProducto.Name = "cmb_RubroProducto";
-            this.cmb_RubroProducto.Size = new System.Drawing.Size(195, 21);
-            this.cmb_RubroProducto.TabIndex = 16;
             // 
             // FormGestionarProductos
             // 
