@@ -34,7 +34,7 @@
             this.txt_DescripcionProducto = new System.Windows.Forms.TextBox();
             this.txt_PrecioUnitarioProducto = new System.Windows.Forms.TextBox();
             this.txt_StockProducto = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbl_NombreProducto = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -45,6 +45,9 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.cmb_RubroProducto = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dtp_FechaVencimientoStock = new System.Windows.Forms.DateTimePicker();
+            this.btn_Pruebas = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_BancoProductos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -101,14 +104,14 @@
             this.txt_StockProducto.Size = new System.Drawing.Size(195, 20);
             this.txt_StockProducto.TabIndex = 4;
             // 
-            // label1
+            // lbl_NombreProducto
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 131);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Nombre Producto";
+            this.lbl_NombreProducto.AutoSize = true;
+            this.lbl_NombreProducto.Location = new System.Drawing.Point(9, 131);
+            this.lbl_NombreProducto.Name = "lbl_NombreProducto";
+            this.lbl_NombreProducto.Size = new System.Drawing.Size(90, 13);
+            this.lbl_NombreProducto.TabIndex = 6;
+            this.lbl_NombreProducto.Text = "Nombre Producto";
             // 
             // label2
             // 
@@ -133,14 +136,14 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(9, 278);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(81, 13);
+            this.label4.Size = new System.Drawing.Size(111, 13);
             this.label4.TabIndex = 9;
-            this.label4.Text = "Stock Producto";
+            this.label4.Text = "Stock Inicial Producto";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 327);
+            this.label5.Location = new System.Drawing.Point(9, 376);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(36, 13);
             this.label5.TabIndex = 10;
@@ -168,7 +171,7 @@
             // 
             // txt_BuscarNombreProducto
             // 
-            this.txt_BuscarNombreProducto.Location = new System.Drawing.Point(12, 392);
+            this.txt_BuscarNombreProducto.Location = new System.Drawing.Point(12, 441);
             this.txt_BuscarNombreProducto.Name = "txt_BuscarNombreProducto";
             this.txt_BuscarNombreProducto.Size = new System.Drawing.Size(195, 20);
             this.txt_BuscarNombreProducto.TabIndex = 14;
@@ -184,6 +187,9 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btn_Pruebas);
+            this.splitContainer1.Panel1.Controls.Add(this.dtp_FechaVencimientoStock);
+            this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.cmb_RubroProducto);
             this.splitContainer1.Panel1.Controls.Add(this.label6);
             this.splitContainer1.Panel1.Controls.Add(this.btn_AgregarProductos);
@@ -196,7 +202,7 @@
             this.splitContainer1.Panel1.Controls.Add(this.txt_StockProducto);
             this.splitContainer1.Panel1.Controls.Add(this.label5);
             this.splitContainer1.Panel1.Controls.Add(this.label4);
-            this.splitContainer1.Panel1.Controls.Add(this.label1);
+            this.splitContainer1.Panel1.Controls.Add(this.lbl_NombreProducto);
             this.splitContainer1.Panel1.Controls.Add(this.label3);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             // 
@@ -211,7 +217,7 @@
             // 
             this.cmb_RubroProducto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmb_RubroProducto.FormattingEnabled = true;
-            this.cmb_RubroProducto.Location = new System.Drawing.Point(12, 344);
+            this.cmb_RubroProducto.Location = new System.Drawing.Point(12, 392);
             this.cmb_RubroProducto.Name = "cmb_RubroProducto";
             this.cmb_RubroProducto.Size = new System.Drawing.Size(195, 21);
             this.cmb_RubroProducto.TabIndex = 16;
@@ -219,11 +225,38 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(9, 376);
+            this.label6.Location = new System.Drawing.Point(9, 425);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(40, 13);
             this.label6.TabIndex = 15;
             this.label6.Text = "Buscar";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 327);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(129, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Fecha Vencimiento Stock";
+            // 
+            // dtp_FechaVencimientoStock
+            // 
+            this.dtp_FechaVencimientoStock.Location = new System.Drawing.Point(12, 344);
+            this.dtp_FechaVencimientoStock.Name = "dtp_FechaVencimientoStock";
+            this.dtp_FechaVencimientoStock.Size = new System.Drawing.Size(200, 20);
+            this.dtp_FechaVencimientoStock.TabIndex = 18;
+            this.dtp_FechaVencimientoStock.Value = new System.DateTime(2025, 10, 27, 0, 0, 0, 0);
+            // 
+            // btn_Pruebas
+            // 
+            this.btn_Pruebas.Location = new System.Drawing.Point(12, 476);
+            this.btn_Pruebas.Name = "btn_Pruebas";
+            this.btn_Pruebas.Size = new System.Drawing.Size(110, 23);
+            this.btn_Pruebas.TabIndex = 19;
+            this.btn_Pruebas.Text = "Agregar Productos";
+            this.btn_Pruebas.UseVisualStyleBackColor = true;
+            this.btn_Pruebas.Click += new System.EventHandler(this.btn_Pruebas_Click);
             // 
             // FormGestionarProductos
             // 
@@ -251,7 +284,7 @@
         private System.Windows.Forms.TextBox txt_DescripcionProducto;
         private System.Windows.Forms.TextBox txt_PrecioUnitarioProducto;
         private System.Windows.Forms.TextBox txt_StockProducto;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbl_NombreProducto;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -262,5 +295,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmb_RubroProducto;
+        private System.Windows.Forms.DateTimePicker dtp_FechaVencimientoStock;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btn_Pruebas;
     }
 }

@@ -8,7 +8,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
 {
     internal class Proveedores
     {
-        public int Id { get; set; }
+        public int IdProveedor { get; set; }
         public string NombreProveedor { get; set; }
         public string ContactoProveedor { get; set; }
         public string TelefonoProveedor { get; set; }

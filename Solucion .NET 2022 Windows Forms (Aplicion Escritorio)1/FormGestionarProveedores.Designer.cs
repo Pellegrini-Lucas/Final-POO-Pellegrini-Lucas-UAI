@@ -41,6 +41,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dgv_BancoProveedores = new System.Windows.Forms.DataGridView();
+            this.txt_BuscarNombreProveedor = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -58,6 +60,8 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.label6);
+            this.splitContainer1.Panel1.Controls.Add(this.txt_BuscarNombreProveedor);
             this.splitContainer1.Panel1.Controls.Add(this.btn_AgregarProveedores);
             this.splitContainer1.Panel1.Controls.Add(this.txt_NombreProveedor);
             this.splitContainer1.Panel1.Controls.Add(this.btn_BajaProveedores);
@@ -189,6 +193,23 @@
             this.dgv_BancoProveedores.Size = new System.Drawing.Size(546, 450);
             this.dgv_BancoProveedores.TabIndex = 11;
             // 
+            // txt_BuscarNombreProveedor
+            // 
+            this.txt_BuscarNombreProveedor.Location = new System.Drawing.Point(12, 346);
+            this.txt_BuscarNombreProveedor.Name = "txt_BuscarNombreProveedor";
+            this.txt_BuscarNombreProveedor.Size = new System.Drawing.Size(195, 20);
+            this.txt_BuscarNombreProveedor.TabIndex = 14;
+            this.txt_BuscarNombreProveedor.TextChanged += new System.EventHandler(this.txt_BuscarNombreProveedor_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 330);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(40, 13);
+            this.label6.TabIndex = 16;
+            this.label6.Text = "Buscar";
+            // 
             // FormGestionarProveedores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -223,5 +244,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgv_BancoProveedores;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txt_BuscarNombreProveedor;
     }
 }

@@ -26,7 +26,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (listaProveedoresMemoria.Count == 0)
                 return 1;
-            return listaProveedoresMemoria.Max(p => p.Id) + 1;
+            return listaProveedoresMemoria.Max(p => p.IdProveedor) + 1;
         }
         private void LimpiarCampos()
         {
@@ -39,7 +39,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (!File.Exists("Proveedores.json"))
             {
-                File.Create("Proveedores.json");
+                File.Create("Proveedores.json").Close();
             }
             string JsonString = File.ReadAllText("Proveedores.json");
             if (string.IsNullOrWhiteSpace(JsonString))
@@ -52,15 +52,16 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 listaProveedoresMemoriaFiltrada = listaProveedoresMemoria.Where(p => p.Activo == true).ToList();
             }
         }
-        private void ActualizarDgv()
+        private void ActualizarDgvBancoProveedores()
         {
             dgv_BancoProveedores.AutoGenerateColumns = false;
+            dgv_BancoProveedores.Columns.Clear();
             dgv_BancoProveedores.ReadOnly = true;
             dgv_BancoProveedores.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_BancoProveedores.MultiSelect = false;
 
-            dgv_BancoProveedores.Columns.Add("Id", "ID");
-            dgv_BancoProveedores.Columns["Id"].DataPropertyName = "Id";
+            dgv_BancoProveedores.Columns.Add("IdProveedor", "ID");
+            dgv_BancoProveedores.Columns["IdProveedor"].DataPropertyName = "IdProveedor";
 
             dgv_BancoProveedores.Columns.Add("NombreProveedor", "Nombre");
             dgv_BancoProveedores.Columns["NombreProveedor"].DataPropertyName = "NombreProveedor";
@@ -86,8 +87,13 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 return;
             }
             Proveedores nuevoProveedor = new Proveedores();
-            nuevoProveedor.Id = GenerarIdProveedor();
-            nuevoProveedor.NombreProveedor = txt_NombreProveedor.Text;
+            nuevoProveedor.IdProveedor = GenerarIdProveedor();
+            if (listaProveedoresMemoriaFiltrada.Exists(p => p.NombreProveedor == txt_NombreProveedor.Text.ToLower()))
+            {
+                MessageBox.Show("Ya existe un producto con este nombre");
+                return;
+            }
+            nuevoProveedor.NombreProveedor = txt_NombreProveedor.Text.ToLower();
             nuevoProveedor.ContactoProveedor = txt_ContactoProveedor.Text;
             nuevoProveedor.DireccionProveedor = txt_DireccionProveedor.Text;
             bool valido = Int64.TryParse(txt_TelefonoProveedor.Text, out _);
@@ -110,9 +116,9 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             string jsonString = JsonSerializer.Serialize (listaProveedoresMemoria);
             File.WriteAllText("Proveedores.json", jsonString);
             CargarListaProveedoresMemoriaFiltrada();
-            ActualizarDgv();
+            ActualizarDgvBancoProveedores();
+            LimpiarCampos();
         }
-
         private void btn_ModificarProveedores_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txt_ContactoProveedor.Text) || string.IsNullOrEmpty(txt_DireccionProveedor.Text) || string.IsNullOrEmpty(txt_NombreProveedor.Text))
@@ -121,11 +127,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 MessageBox.Show("todos los campos deben estar completos");
                 return;
             }
-            int idSeleccionado = (int)dgv_BancoProveedores.SelectedRows[0].Cells["Id"].Value;
-            Proveedores ProveedorSeleccionado = listaProveedoresMemoria.FirstOrDefault(p => p.Id == idSeleccionado);
+            int idSeleccionado = (int)dgv_BancoProveedores.SelectedRows[0].Cells["IdProveedor"].Value;
+            Proveedores ProveedorSeleccionado = listaProveedoresMemoria.FirstOrDefault(p => p.IdProveedor == idSeleccionado);
             ProveedorSeleccionado.ContactoProveedor = txt_ContactoProveedor.Text;
             ProveedorSeleccionado.DireccionProveedor = txt_DireccionProveedor.Text;
-            ProveedorSeleccionado.NombreProveedor = txt_NombreProveedor.Text;
+            ProveedorSeleccionado.NombreProveedor = txt_NombreProveedor.Text.ToLower();
             bool valido = Int64.TryParse(txt_TelefonoProveedor.Text, out _);
             if (valido == false)
             {
@@ -145,27 +151,37 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             string JsonString = JsonSerializer.Serialize(listaProveedoresMemoria);
             File.WriteAllText("Proveedores.json",JsonString);
             CargarListaProveedoresMemoriaFiltrada();
-            ActualizarDgv();
+            ActualizarDgvBancoProveedores();
         }
-
         private void btn_BajaProveedores_Click(object sender, EventArgs e)
         {
             if (dgv_BancoProveedores.SelectedRows !=null)
             { 
-                int idSeleccionado = (int)dgv_BancoProveedores.SelectedRows[0].Cells["Id"].Value;
-                Proveedores ProveedorSeleccionado = listaProveedoresMemoria.FirstOrDefault(p => p.Id == idSeleccionado);
+                int idSeleccionado = (int)dgv_BancoProveedores.SelectedRows[0].Cells["IdProveedor"].Value;
+                Proveedores ProveedorSeleccionado = listaProveedoresMemoria.FirstOrDefault(p => p.IdProveedor == idSeleccionado);
                 listaProveedoresMemoria.Remove(ProveedorSeleccionado);
                 string JsonString = JsonSerializer.Serialize(listaProveedoresMemoria);
                 File.WriteAllText("Proveedores.json", JsonString);
                 CargarListaProveedoresMemoriaFiltrada();
-                ActualizarDgv();
+                ActualizarDgvBancoProveedores();
+                LimpiarCampos();
             }
         }
-
         private void FormGestionarProveedores_Load(object sender, EventArgs e)
         {
             CargarListaProveedoresMemoriaFiltrada();
-            ActualizarDgv();
+            ActualizarDgvBancoProveedores();
+        }
+        private void txt_BuscarNombreProveedor_TextChanged(object sender, EventArgs e)
+        {
+            List<Proveedores> listaProveedoresEncontrados = new List<Proveedores>();
+            if (txt_BuscarNombreProveedor.TextLength > 0)
+            { 
+                listaProveedoresEncontrados = listaProveedoresMemoriaFiltrada.FindAll(p => p.NombreProveedor.ToLower().Contains(txt_BuscarNombreProveedor.Text.ToLower()));
+                dgv_BancoProveedores.DataSource = listaProveedoresEncontrados;
+            }
+            if (listaProveedoresEncontrados.Count == 0) dgv_BancoProveedores.DataSource = null;
+            if (txt_BuscarNombreProveedor.TextLength == 0) ActualizarDgvBancoProveedores();
         }
     }
 }

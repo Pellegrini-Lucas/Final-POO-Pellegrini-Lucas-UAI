@@ -98,12 +98,20 @@
     <Compile Include="FormGestionarRubro.Designer.cs">
       <DependentUpon>FormGestionarRubro.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormGestionarStock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGestionarStock.Designer.cs">
+      <DependentUpon>FormGestionarStock.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMenuPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMenuPrincipal.Designer.cs">
       <DependentUpon>FormMenuPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Historial.cs" />
+    <Compile Include="Lotes.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormGestionarRubro.resx">
       <DependentUpon>FormGestionarRubro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormGestionarStock.resx">
+      <DependentUpon>FormGestionarStock.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMenuPrincipal.resx">
       <DependentUpon>FormMenuPrincipal.cs</DependentUpon>

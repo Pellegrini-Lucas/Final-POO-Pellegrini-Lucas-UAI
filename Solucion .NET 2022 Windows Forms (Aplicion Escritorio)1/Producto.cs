@@ -9,12 +9,12 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
 {
     internal class Producto
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
-        public decimal PrecioUnitario { get; set; }
-        public string Rubro { get; set; }
-        public int Stock { get; set; }
+        public int IdProducto { get; set; }
+        public string NombreProducto { get; set; }
+        public string DescripcionProducto { get; set; }
+        public decimal PrecioUnitarioProducto { get; set; }
+        public string RubroProducto { get; set; }
+        public int StockProducto { get; set; }
         public bool Activo { get; set; } = true;
         public int IdRubro { get; set; }
     }

@@ -34,5 +34,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             FormGestionarProveedores formGestionarProveedores = new FormGestionarProveedores();
             formGestionarProveedores.ShowDialog();
         }
+
+        private void btn_AbrirFormGestionarStock_Click(object sender, EventArgs e)
+        {
+            FormGestionarStock formGestionarStock = new FormGestionarStock();
+            formGestionarStock.ShowDialog();
+        }
     }
 }

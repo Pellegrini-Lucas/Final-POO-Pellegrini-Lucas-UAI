@@ -31,7 +31,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (listaRubrosMemoria.Count == 0)
                 return 1;
-            return listaRubrosMemoria.Max(p => p.Id) + 1;
+            return listaRubrosMemoria.Max(p => p.IdRubro) + 1;
         }
         private void CargarListaRubrosMemoriaFiltrada()
         {
@@ -60,7 +60,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             listaProductosMemoriaFiltrada = listaProductosMemoria.Where(p => p.Activo == true).ToList();
             foreach (Rubro rubro in listaRubrosMemoriaFiltrada)
             {
-                List<Producto> productosAAsignar = listaProductosMemoriaFiltrada.FindAll(p => p.Rubro == rubro.NombreRubro);
+                List<Producto> productosAAsignar = listaProductosMemoriaFiltrada.FindAll(p => p.RubroProducto == rubro.NombreRubro);
                 rubro.CantidadProductosAsignados = productosAAsignar.Count;
             }
         }
@@ -72,8 +72,8 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             dgv_BancoRubros.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_BancoRubros.Columns.Clear();
 
-            dgv_BancoRubros.Columns.Add("Id", "ID");
-            dgv_BancoRubros.Columns["ID"].DataPropertyName = "Id";
+            dgv_BancoRubros.Columns.Add("IdRubro", "ID");
+            dgv_BancoRubros.Columns["IdRubro"].DataPropertyName = "IdRubro";
 
             dgv_BancoRubros.Columns.Add("NombreRubro","Rubro");
             dgv_BancoRubros.Columns["NombreRubro"].DataPropertyName = "NombreRubro";
@@ -96,24 +96,23 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 return;
             }
             Rubro nuevoRubro = new Rubro();
-            nuevoRubro.Id = GenerarIdProducto();
+            nuevoRubro.IdRubro = GenerarIdProducto();
+            //evito que se repitan nombres
+            if (listaRubrosMemoriaFiltrada.Exists(p => p.NombreRubro == nuevoRubro.NombreRubro))
+            {
+                MessageBox.Show($"el Rubro {nuevoRubro.NombreRubro} ya existe");
+                return;
+            }
             nuevoRubro.NombreRubro = txt_NombreRubro.Text.ToLower();
             nuevoRubro.DescripcionRubro = txt_DescripcionRubro.Text;
             nuevoRubro.CantidadProductosAsignados = 0;
-            //evito que se repitan nombres
-            if (!listaRubrosMemoriaFiltrada.Exists(p => p.NombreRubro == nuevoRubro.NombreRubro))
-            {
-                listaRubrosMemoria.Add(nuevoRubro);
-                string JsonString = JsonSerializer.Serialize(listaRubrosMemoria);
-                File.WriteAllText("Rubros.json", JsonString);
-                CargarListaRubrosMemoriaFiltrada();
-                ActualizarDgv();
-                LimpiarCampos();
-            }
-            else MessageBox.Show($"el Rubro {nuevoRubro.NombreRubro} ya existe");
-                return;
+            listaRubrosMemoria.Add(nuevoRubro);
+            string JsonString = JsonSerializer.Serialize(listaRubrosMemoria);
+            File.WriteAllText("Rubros.json", JsonString);
+            CargarListaRubrosMemoriaFiltrada();
+            ActualizarDgv();
+            LimpiarCampos();
         }
-
         private void btn_ModificarRubro_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txt_DescripcionRubro.Text) || string.IsNullOrEmpty(txt_NombreRubro.Text))
@@ -124,8 +123,8 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             }
             if (dgv_BancoRubros.SelectedRows != null)
             {
-                int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells["Id"].Value;
-                Rubro rubro = listaRubrosMemoria.FirstOrDefault(p => p.Id == idRubroSeleccionado);
+                int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells["IdRubro"].Value;
+                Rubro rubro = listaRubrosMemoria.FirstOrDefault(p => p.IdRubro == idRubroSeleccionado);
                 rubro.DescripcionRubro = txt_DescripcionRubro.Text;
                 if (!listaRubrosMemoriaFiltrada.Exists(p => p.NombreRubro == txt_NombreRubro.Text))
                 {
@@ -141,13 +140,12 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 }
             }
         }
-
         private void btn_BajaRubro_Click(object sender, EventArgs e)
         {
             if (dgv_BancoRubros.SelectedRows != null)
             {
-                int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells["Id"].Value;
-                Rubro rubroSeleccionado = listaRubrosMemoria.FirstOrDefault(p => p.Id == idRubroSeleccionado);
+                int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells["IdRubro"].Value;
+                Rubro rubroSeleccionado = listaRubrosMemoria.FirstOrDefault(p => p.IdRubro == idRubroSeleccionado);
                 if (rubroSeleccionado != null)
                 {
                     if (rubroSeleccionado.CantidadProductosAsignados > 0)
@@ -165,7 +163,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 }
             }
         }
-
         private void FormGestionarRubro_Load(object sender, EventArgs e)
         {
             CargarListaRubrosMemoriaFiltrada();
@@ -173,14 +170,13 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             ActualizarDgv();
             LimpiarCampos();      
         }
-
         private void dgv_BancoRubros_SelectionChanged(object sender, EventArgs e)
         {
             if (dgv_BancoRubros.SelectedRows.Count > 0)
             {
                 if (dgv_BancoRubros.SelectedRows[0].Cells[0].Value == null) return;
                 int idRubroSeleccionado = (int)dgv_BancoRubros.SelectedRows[0].Cells[0].Value;
-                Rubro rubroSeleccionado = listaRubrosMemoria.FirstOrDefault(p => p.Id == idRubroSeleccionado);
+                Rubro rubroSeleccionado = listaRubrosMemoria.FirstOrDefault(p => p.IdRubro == idRubroSeleccionado);
                 if (rubroSeleccionado != null)
                 {
                     txt_NombreRubro.Text = rubroSeleccionado.NombreRubro;

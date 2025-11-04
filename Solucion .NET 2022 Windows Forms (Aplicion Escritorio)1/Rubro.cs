@@ -8,7 +8,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
 {
     internal class Rubro
     {
-        public int Id { get; set; }
+        public int IdRubro { get; set; }
         public string NombreRubro { get; set; }
         public string DescripcionRubro { get; set; }
         public int CantidadProductosAsignados { get; set; }
