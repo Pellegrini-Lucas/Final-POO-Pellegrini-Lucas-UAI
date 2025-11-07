@@ -40,5 +40,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             FormGestionarStock formGestionarStock = new FormGestionarStock();
             formGestionarStock.ShowDialog();
         }
+
+        private void btn_AbrirFormGestionarReportes_Click(object sender, EventArgs e)
+        {
+            FormGestionarReportes formGestionarReportes = new FormGestionarReportes();
+            formGestionarReportes.ShowDialog();
+        }
     }
 }

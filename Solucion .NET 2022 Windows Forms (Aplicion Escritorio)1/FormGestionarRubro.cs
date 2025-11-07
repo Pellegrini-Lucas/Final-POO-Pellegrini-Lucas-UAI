@@ -150,7 +150,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 {
                     if (rubroSeleccionado.CantidadProductosAsignados > 0)
                     {
-                        MessageBox.Show($"El rubro {rubroSeleccionado.NombreRubro} ya tiene un producto o mas asignados");
+                        MessageBox.Show($"El rubro {rubroSeleccionado.NombreRubro} tiene {rubroSeleccionado.CantidadProductosAsignados} productos asignados eliminelos antes de borrar el rubro");
                     }
                     else
                     {

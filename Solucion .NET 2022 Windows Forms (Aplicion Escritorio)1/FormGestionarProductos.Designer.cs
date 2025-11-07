@@ -45,14 +45,17 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.cmb_RubroProducto = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.dtp_FechaVencimientoStock = new System.Windows.Forms.DateTimePicker();
-            this.btn_Pruebas = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lbl_Vencimiento = new System.Windows.Forms.Label();
+            this.dtp_VencimientoStockIngresanteEgresante = new System.Windows.Forms.DateTimePicker();
+            this.rbt_NoPerecedero = new System.Windows.Forms.RadioButton();
+            this.rbt_Perecedero = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_BancoProductos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgv_BancoProductos
@@ -62,7 +65,7 @@
             this.dgv_BancoProductos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_BancoProductos.Location = new System.Drawing.Point(0, 0);
             this.dgv_BancoProductos.Name = "dgv_BancoProductos";
-            this.dgv_BancoProductos.Size = new System.Drawing.Size(776, 527);
+            this.dgv_BancoProductos.Size = new System.Drawing.Size(776, 687);
             this.dgv_BancoProductos.TabIndex = 11;
             this.dgv_BancoProductos.SelectionChanged += new System.EventHandler(this.dgv_BancoProductos_SelectionChanged);
             // 
@@ -143,7 +146,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 376);
+            this.label5.Location = new System.Drawing.Point(9, 464);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(36, 13);
             this.label5.TabIndex = 10;
@@ -171,7 +174,7 @@
             // 
             // txt_BuscarNombreProducto
             // 
-            this.txt_BuscarNombreProducto.Location = new System.Drawing.Point(12, 441);
+            this.txt_BuscarNombreProducto.Location = new System.Drawing.Point(12, 529);
             this.txt_BuscarNombreProducto.Name = "txt_BuscarNombreProducto";
             this.txt_BuscarNombreProducto.Size = new System.Drawing.Size(195, 20);
             this.txt_BuscarNombreProducto.TabIndex = 14;
@@ -187,9 +190,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.btn_Pruebas);
-            this.splitContainer1.Panel1.Controls.Add(this.dtp_FechaVencimientoStock);
-            this.splitContainer1.Panel1.Controls.Add(this.label1);
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
             this.splitContainer1.Panel1.Controls.Add(this.cmb_RubroProducto);
             this.splitContainer1.Panel1.Controls.Add(this.label6);
             this.splitContainer1.Panel1.Controls.Add(this.btn_AgregarProductos);
@@ -209,7 +210,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgv_BancoProductos);
-            this.splitContainer1.Size = new System.Drawing.Size(1030, 527);
+            this.splitContainer1.Size = new System.Drawing.Size(1030, 687);
             this.splitContainer1.SplitterDistance = 250;
             this.splitContainer1.TabIndex = 15;
             // 
@@ -217,7 +218,7 @@
             // 
             this.cmb_RubroProducto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmb_RubroProducto.FormattingEnabled = true;
-            this.cmb_RubroProducto.Location = new System.Drawing.Point(12, 392);
+            this.cmb_RubroProducto.Location = new System.Drawing.Point(12, 480);
             this.cmb_RubroProducto.Name = "cmb_RubroProducto";
             this.cmb_RubroProducto.Size = new System.Drawing.Size(195, 21);
             this.cmb_RubroProducto.TabIndex = 16;
@@ -225,44 +226,69 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(9, 425);
+            this.label6.Location = new System.Drawing.Point(9, 513);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(40, 13);
             this.label6.TabIndex = 15;
             this.label6.Text = "Buscar";
             // 
-            // label1
+            // groupBox1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 327);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(129, 13);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Fecha Vencimiento Stock";
+            this.groupBox1.Controls.Add(this.lbl_Vencimiento);
+            this.groupBox1.Controls.Add(this.dtp_VencimientoStockIngresanteEgresante);
+            this.groupBox1.Controls.Add(this.rbt_NoPerecedero);
+            this.groupBox1.Controls.Add(this.rbt_Perecedero);
+            this.groupBox1.Location = new System.Drawing.Point(12, 320);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(237, 132);
+            this.groupBox1.TabIndex = 19;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "El producto es perecedero?";
             // 
-            // dtp_FechaVencimientoStock
+            // lbl_Vencimiento
             // 
-            this.dtp_FechaVencimientoStock.Location = new System.Drawing.Point(12, 344);
-            this.dtp_FechaVencimientoStock.Name = "dtp_FechaVencimientoStock";
-            this.dtp_FechaVencimientoStock.Size = new System.Drawing.Size(200, 20);
-            this.dtp_FechaVencimientoStock.TabIndex = 18;
-            this.dtp_FechaVencimientoStock.Value = new System.DateTime(2025, 10, 27, 0, 0, 0, 0);
+            this.lbl_Vencimiento.AutoSize = true;
+            this.lbl_Vencimiento.Location = new System.Drawing.Point(1, 63);
+            this.lbl_Vencimiento.Name = "lbl_Vencimiento";
+            this.lbl_Vencimiento.Size = new System.Drawing.Size(112, 13);
+            this.lbl_Vencimiento.TabIndex = 3;
+            this.lbl_Vencimiento.Text = "Fecha de vencimiento";
             // 
-            // btn_Pruebas
+            // dtp_VencimientoStockIngresanteEgresante
             // 
-            this.btn_Pruebas.Location = new System.Drawing.Point(12, 476);
-            this.btn_Pruebas.Name = "btn_Pruebas";
-            this.btn_Pruebas.Size = new System.Drawing.Size(110, 23);
-            this.btn_Pruebas.TabIndex = 19;
-            this.btn_Pruebas.Text = "Agregar Productos";
-            this.btn_Pruebas.UseVisualStyleBackColor = true;
-            this.btn_Pruebas.Click += new System.EventHandler(this.btn_Pruebas_Click);
+            this.dtp_VencimientoStockIngresanteEgresante.Location = new System.Drawing.Point(0, 79);
+            this.dtp_VencimientoStockIngresanteEgresante.Name = "dtp_VencimientoStockIngresanteEgresante";
+            this.dtp_VencimientoStockIngresanteEgresante.Size = new System.Drawing.Size(200, 20);
+            this.dtp_VencimientoStockIngresanteEgresante.TabIndex = 2;
+            // 
+            // rbt_NoPerecedero
+            // 
+            this.rbt_NoPerecedero.AutoSize = true;
+            this.rbt_NoPerecedero.Location = new System.Drawing.Point(7, 43);
+            this.rbt_NoPerecedero.Name = "rbt_NoPerecedero";
+            this.rbt_NoPerecedero.Size = new System.Drawing.Size(39, 17);
+            this.rbt_NoPerecedero.TabIndex = 1;
+            this.rbt_NoPerecedero.TabStop = true;
+            this.rbt_NoPerecedero.Text = "No";
+            this.rbt_NoPerecedero.UseVisualStyleBackColor = true;
+            // 
+            // rbt_Perecedero
+            // 
+            this.rbt_Perecedero.AutoSize = true;
+            this.rbt_Perecedero.Location = new System.Drawing.Point(7, 20);
+            this.rbt_Perecedero.Name = "rbt_Perecedero";
+            this.rbt_Perecedero.Size = new System.Drawing.Size(34, 17);
+            this.rbt_Perecedero.TabIndex = 0;
+            this.rbt_Perecedero.TabStop = true;
+            this.rbt_Perecedero.Text = "Si";
+            this.rbt_Perecedero.UseVisualStyleBackColor = true;
+            this.rbt_Perecedero.CheckedChanged += new System.EventHandler(this.rbt_Perecedero_CheckedChanged);
             // 
             // FormGestionarProductos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1030, 527);
+            this.ClientSize = new System.Drawing.Size(1030, 687);
             this.Controls.Add(this.splitContainer1);
             this.Name = "FormGestionarProductos";
             this.Text = "Gestor de productos";
@@ -273,6 +299,8 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -295,8 +323,10 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmb_RubroProducto;
-        private System.Windows.Forms.DateTimePicker dtp_FechaVencimientoStock;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btn_Pruebas;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lbl_Vencimiento;
+        private System.Windows.Forms.DateTimePicker dtp_VencimientoStockIngresanteEgresante;
+        private System.Windows.Forms.RadioButton rbt_NoPerecedero;
+        private System.Windows.Forms.RadioButton rbt_Perecedero;
     }
 }

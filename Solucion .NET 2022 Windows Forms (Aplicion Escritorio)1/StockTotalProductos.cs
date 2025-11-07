@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
 {
-    internal class Historial
+    internal class StockTotalProductos
     {
+        public int stockTotal { get; set; }
+        public string nombreProducto { get; set; }
     }
 }

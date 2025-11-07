@@ -22,23 +22,13 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         List<Rubro> listaRubrosMemoria = new List<Rubro>();
         List<Rubro> listaRubrosMemoriaFiltrada = new List<Rubro>();
         List<Lotes> listaLotesMemoria = new List<Lotes>();
-        List<Lotes> listaLotesMemoriaFiltrada = new List<Lotes>();
         public FormGestionarProductos()
         {
             InitializeComponent();
         }
         private void CargarCmbRubros()
         {
-            if (!File.Exists("Rubros.json"))
-            {
-                File.Create("Rubros.json").Close();
-            }
-            string jsonString = File.ReadAllText("Rubros.json");
-            if (string.IsNullOrWhiteSpace(jsonString))
-                listaRubrosMemoria = new List<Rubro>();
-            else
-                listaRubrosMemoria = JsonSerializer.Deserialize<List<Rubro>>(jsonString);
-            listaRubrosMemoriaFiltrada = listaRubrosMemoria.Where(p => p.Activo == true).ToList();
+            CargarListaRubrosMemoriaFiltrada();
             foreach (Rubro rubro in listaRubrosMemoriaFiltrada)
             {
                 cmb_RubroProducto.Items.Add(rubro.NombreRubro);
@@ -86,7 +76,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 listaProductosMemoria = JsonSerializer.Deserialize<List<Producto>>(jsonString);
             listaProductosMemoriaFiltrada = listaProductosMemoria.Where(p => p.Activo == true).ToList();
         }
-        private void CargarListaLotesMemoriaFiltrada()
+        private void CargarListaLotesMemoria()
         {
             if (!File.Exists("Lotes.json"))
             {
@@ -94,10 +84,24 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             }
             string jsonString = File.ReadAllText("Lotes.json");
             if (string.IsNullOrWhiteSpace(jsonString))
+            {
                 listaLotesMemoria = new List<Lotes>();
+            }
             else
                 listaLotesMemoria = JsonSerializer.Deserialize<List<Lotes>>(jsonString);
-            listaLotesMemoriaFiltrada = listaLotesMemoria.Where(p => p.Activo == true).ToList();
+        }
+        private void CargarListaRubrosMemoriaFiltrada()
+        {
+            if (!File.Exists("Rubros.json"))
+            {
+                File.Create("Rubros.json").Close();
+            }
+            string jsonString = File.ReadAllText("Rubros.json");
+            if (string.IsNullOrWhiteSpace(jsonString))
+                listaRubrosMemoria = new List<Rubro>();
+            else
+                listaRubrosMemoria = JsonSerializer.Deserialize<List<Rubro>>(jsonString);
+            listaRubrosMemoriaFiltrada = listaRubrosMemoria.Where(p => p.Activo == true).ToList();
         }
         private void txt_BuscarNombreProducto_TextChanged(object sender, EventArgs e)
         {
@@ -158,6 +162,19 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             cmb_RubroProducto.Text = "";
             txt_StockProducto.Text = "";
         }
+        private void GestorControlesVencimiento()
+        {
+            if (rbt_Perecedero.Checked)
+            {
+                lbl_Vencimiento.Enabled = true;
+                dtp_VencimientoStockIngresanteEgresante.Enabled = true;
+            }
+            else
+            {
+                lbl_Vencimiento.Enabled = false;
+                dtp_VencimientoStockIngresanteEgresante.Enabled = false;
+            }
+        }
         private void FormGestionarProductos_Load(object sender, EventArgs e)
         {
             LimpiarCampos();
@@ -165,6 +182,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             ActualizarDgvBancoProductos();
             CargarListaProductosMemoriaFiltrada();
             CargarCmbRubros();
+            GestorControlesVencimiento();
         }
         private void btn_AgregarProductos_Click(object sender, EventArgs e)
         {
@@ -172,12 +190,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             {
                 //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto   
                 MessageBox.Show("todos los campos deben estar completos");
-                return;
-            }
-            int revisionVencimiento = DateTime.Compare(dtp_FechaVencimientoStock.Value.Date,DateTime.Now.Date);
-            if (revisionVencimiento < 0 || revisionVencimiento == 0)
-            {
-                MessageBox.Show("La fecha de vencimiento no puede ser la fecha actual ni una anterior");
                 return;
             }
             Producto nuevoProducto = new Producto();
@@ -192,6 +204,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             nuevoProducto.RubroProducto = cmb_RubroProducto.Text;
             try
             {
+                if (decimal.Parse(txt_PrecioUnitarioProducto.Text) < 0 || decimal.Parse(txt_PrecioUnitarioProducto.Text) == 0)
+                {
+                    MessageBox.Show("El precio unitario no puede ser un numero negativo o cero");
+                    return;
+                }
                 nuevoProducto.PrecioUnitarioProducto = decimal.Parse(txt_PrecioUnitarioProducto.Text);
             }
             catch 
@@ -201,6 +218,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             }
             try
             {
+                if (int.Parse(txt_StockProducto.Text) < 0 || int.Parse(txt_StockProducto.Text) == 0)
+                {
+                    MessageBox.Show("El stock no puede ser un numero negativo o cero");
+                    return;
+                }
                 nuevoProducto.StockProducto = int.Parse(txt_StockProducto.Text);
             }
             catch
@@ -211,25 +233,37 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             Rubro rubroSeleccionado = listaRubrosMemoriaFiltrada.FirstOrDefault(p => p.NombreRubro == cmb_RubroProducto.Text);
             nuevoProducto.IdRubro = rubroSeleccionado.IdRubro;
             rubroSeleccionado.CantidadProductosAsignados += 1;
-            string jsonString = JsonSerializer.Serialize(listaProductosMemoria);
-            File.WriteAllText("productos.json", jsonString);
-            listaProductosMemoria.Add(nuevoProducto);
-            jsonString = JsonSerializer.Serialize(listaProductosMemoria);
-            File.WriteAllText("productos.json", jsonString);
-            CargarListaProductosMemoriaFiltrada();
 
             //
 
             Lotes nuevoLote = new Lotes();
+            nuevoLote.NombreProducto = nuevoProducto.NombreProducto;
             nuevoLote.IdLote = GenerarIdLote();
-            nuevoLote.FechaIngreso = DateTime.Now.Date;
-            nuevoLote.FechaVencimimento = dtp_FechaVencimientoStock.Value;
-            nuevoLote.FechaEgreso = null;
-            nuevoLote.IdProducto = nuevoProducto.IdProducto;
+            nuevoLote.FechaMovimiento = DateTime.Now.Date;
+            if (rbt_Perecedero.Checked)
+            {
+                int revisionVencimiento = DateTime.Compare(dtp_VencimientoStockIngresanteEgresante.Value.Date, DateTime.Now.Date);
+                if (revisionVencimiento < 0 || revisionVencimiento == 0)
+                {
+                    MessageBox.Show("La fecha de vencimiento no puede ser la fecha actual ni una anterior");
+                    return;
+                }
+                nuevoLote.FechaVencimiento = dtp_VencimientoStockIngresanteEgresante.Value;
+            }
+            nuevoLote.TipoMovimiento = Lotes.Movimiento.Ingreso;
+            nuevoLote.NombreProducto = nuevoProducto.NombreProducto;
+            nuevoLote.NombreProveedor = string.Empty;
+            nuevoLote.Cantidad = nuevoProducto.StockProducto;
+
+            listaProductosMemoria.Add(nuevoProducto);
+            string jsonString = JsonSerializer.Serialize(listaProductosMemoria);
+            File.WriteAllText("productos.json", jsonString);
+            CargarListaProductosMemoriaFiltrada();
+
             listaLotesMemoria.Add(nuevoLote);
             jsonString = JsonSerializer.Serialize(listaLotesMemoria);
             File.WriteAllText("lotes.json", jsonString);
-            CargarListaLotesMemoriaFiltrada();
+            CargarListaLotesMemoria();
             ActualizarDgvBancoProductos();
             LimpiarCampos();
         }
@@ -257,7 +291,12 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                     productoSeleccionado.RubroProducto = cmb_RubroProducto.Text;
                     try
                     {
-                        productoSeleccionado.PrecioUnitarioProducto = decimal.Parse(txt_PrecioUnitarioProducto.Text);
+                        if (decimal.Parse(txt_PrecioUnitarioProducto.Text) < 0 || decimal.Parse(txt_PrecioUnitarioProducto.Text) == 0)
+                        {
+                            MessageBox.Show("El precio unitario no puede ser un numero negativo o cero");
+                            return;
+                        }
+                            productoSeleccionado.PrecioUnitarioProducto = decimal.Parse(txt_PrecioUnitarioProducto.Text);
                     }
                     catch
                     {
@@ -270,6 +309,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                     }
                     catch
                     {
+                        if (int.Parse(txt_StockProducto.Text) < 0 || int.Parse(txt_StockProducto.Text) == 0)
+                        {
+                            MessageBox.Show("El stock no puede ser un numero negativo o cero");
+                            return;
+                        }
                         MessageBox.Show("Ingrese una cantidad de stock valida");
                         return;
                     }
@@ -299,7 +343,13 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
 
         private void btn_Pruebas_Click(object sender, EventArgs e)
         {
+            CargarListaLotesMemoria();
             MessageBox.Show($"{DateTime.Today.Date}");
+        }
+
+        private void rbt_Perecedero_CheckedChanged(object sender, EventArgs e)
+        {
+            GestorControlesVencimiento();
         }
     }
 }

@@ -32,6 +32,7 @@
             this.btn_AbrirFormGestionarRubro = new System.Windows.Forms.Button();
             this.btn_AbrirFormGestionarProveedores = new System.Windows.Forms.Button();
             this.btn_AbrirFormGestionarStock = new System.Windows.Forms.Button();
+            this.btn_AbrirFormGestionarReportes = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_AbrirFormGestionProductos
@@ -74,11 +75,22 @@
             this.btn_AbrirFormGestionarStock.UseVisualStyleBackColor = true;
             this.btn_AbrirFormGestionarStock.Click += new System.EventHandler(this.btn_AbrirFormGestionarStock_Click);
             // 
+            // btn_AbrirFormGestionarReportes
+            // 
+            this.btn_AbrirFormGestionarReportes.Location = new System.Drawing.Point(12, 128);
+            this.btn_AbrirFormGestionarReportes.Name = "btn_AbrirFormGestionarReportes";
+            this.btn_AbrirFormGestionarReportes.Size = new System.Drawing.Size(127, 23);
+            this.btn_AbrirFormGestionarReportes.TabIndex = 4;
+            this.btn_AbrirFormGestionarReportes.Text = "Ver Reportes";
+            this.btn_AbrirFormGestionarReportes.UseVisualStyleBackColor = true;
+            this.btn_AbrirFormGestionarReportes.Click += new System.EventHandler(this.btn_AbrirFormGestionarReportes_Click);
+            // 
             // FormMenuPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btn_AbrirFormGestionarReportes);
             this.Controls.Add(this.btn_AbrirFormGestionarStock);
             this.Controls.Add(this.btn_AbrirFormGestionarProveedores);
             this.Controls.Add(this.btn_AbrirFormGestionarRubro);
@@ -95,5 +107,6 @@
         private System.Windows.Forms.Button btn_AbrirFormGestionarRubro;
         private System.Windows.Forms.Button btn_AbrirFormGestionarProveedores;
         private System.Windows.Forms.Button btn_AbrirFormGestionarStock;
+        private System.Windows.Forms.Button btn_AbrirFormGestionarReportes;
     }
 }
