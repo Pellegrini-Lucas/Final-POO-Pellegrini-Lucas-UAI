@@ -91,13 +91,11 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (string.IsNullOrEmpty(txt_DescripcionRubro.Text)||string.IsNullOrEmpty(txt_NombreRubro.Text))
             {
-                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
                 MessageBox.Show("todos los campos deben estar completos");
                 return;
             }
             Rubro nuevoRubro = new Rubro();
             nuevoRubro.IdRubro = GenerarIdProducto();
-            //evito que se repitan nombres
             if (listaRubrosMemoriaFiltrada.Exists(p => p.NombreRubro == nuevoRubro.NombreRubro))
             {
                 MessageBox.Show($"el Rubro {nuevoRubro.NombreRubro} ya existe");
@@ -117,7 +115,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (string.IsNullOrEmpty(txt_DescripcionRubro.Text) || string.IsNullOrEmpty(txt_NombreRubro.Text))
             {
-                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
+
                 MessageBox.Show("todos los campos deben estar completos");
                 return;
             }

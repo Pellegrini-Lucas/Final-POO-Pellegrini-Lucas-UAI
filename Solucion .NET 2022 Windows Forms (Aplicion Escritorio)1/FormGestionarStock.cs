@@ -160,12 +160,10 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             ActualizarDgvBancoProductos();
             GestorControlesVencimiento();
         }
-
         private void rbt_Perecedero_CheckedChanged(object sender, EventArgs e)
         {
             GestorControlesVencimiento();
         }
-
         private void btn_IngresarStock_Click(object sender, EventArgs e)
         {
             Lotes nuevoLote = new Lotes();
@@ -211,7 +209,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             CargarListaLotesMemoriaFiltrada();
             ActualizarDgvBancoProductos();
         }
-
         private void btn_EgresoStock_Click(object sender, EventArgs e)
         {
             Lotes nuevoLote = new Lotes(); 
@@ -268,7 +265,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             CargarListaLotesMemoriaFiltrada();
             ActualizarDgvBancoProductos();
         }
-
         private void cmb_OpcionesDeFiltrado_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmb_OpcionesDeFiltrado.SelectedIndex == 0)
@@ -320,21 +316,18 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 dtp_FiltroFechaHasta.Visible = true;
             }
         }
-
         private void cmb_FiltroMovProductos_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<Lotes> listaFiltradaPorProducto = listaLotesMemoriaFiltrada.Where(p => p.NombreProducto == cmb_FiltroMovProductos.SelectedItem.ToString()).ToList();
             dgv_IngresosEgresos.DataSource = null;
             dgv_IngresosEgresos.DataSource = listaFiltradaPorProducto;
         }
-
         private void cmb_FiltroMovTipo_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<Lotes> listaFiltradaPorTipo = listaLotesMemoriaFiltrada.Where(p => p.TipoMovimiento.ToString() == cmb_FiltroMovTipo.SelectedItem.ToString()).ToList();
             dgv_IngresosEgresos.DataSource = null;
             dgv_IngresosEgresos.DataSource = listaFiltradaPorTipo;
         }
-
         private void dtp_FiltroFechaDesde_ValueChanged(object sender, EventArgs e)
         {
             int revisionVencimiento = DateTime.Compare(dtp_FiltroFechaDesde.Value.Date, dtp_FiltroFechaHasta.Value.Date);
@@ -349,7 +342,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             dgv_IngresosEgresos.DataSource = null;
             dgv_IngresosEgresos.DataSource = listaFiltradaPorFecha;
         }
-
         private void dtp_FiltroFechaHasta_ValueChanged(object sender, EventArgs e)
         {
             int revisionVencimiento = DateTime.Compare(dtp_FiltroFechaDesde.Value.Date, dtp_FiltroFechaHasta.Value.Date);

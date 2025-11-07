@@ -82,7 +82,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (string.IsNullOrEmpty(txt_ContactoProveedor.Text) || string.IsNullOrEmpty(txt_DireccionProveedor.Text) || string.IsNullOrEmpty(txt_NombreProveedor.Text))
             {
-                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
                 MessageBox.Show("todos los campos deben estar completos");
                 return;
             }
@@ -123,7 +122,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (string.IsNullOrEmpty(txt_ContactoProveedor.Text) || string.IsNullOrEmpty(txt_DireccionProveedor.Text) || string.IsNullOrEmpty(txt_NombreProveedor.Text))
             {
-                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
                 MessageBox.Show("todos los campos deben estar completos");
                 return;
             }
