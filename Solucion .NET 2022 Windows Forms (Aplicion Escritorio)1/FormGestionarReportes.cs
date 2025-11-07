@@ -51,8 +51,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 listaLotesMemoria = new List<Lotes>();
             }
             else
-                listaLotesMemoria = JsonSerializer.Deserialize<List<Lotes>>(jsonString);
-            listaLotesMemoriaFiltrada = listaLotesMemoria.Where(p => p.Activo == true).ToList();
+                listaLotesMemoriaFiltrada = JsonSerializer.Deserialize<List<Lotes>>(jsonString);
         }
         private void CargarListaProductosMemoriaFiltrada()
         {
@@ -152,6 +151,21 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 }
             }
         }
+        private void GenerarReporteLotesProductosProntoAVencer()
+        {
+            DateTime fechaActual = DateTime.Now;
+            DateTime fechaLimite = fechaActual.AddDays(7); 
+            foreach (var lote in listaLotesMemoriaFiltrada)
+            {
+                if (lote.FechaVencimiento.HasValue && lote.FechaVencimiento.Value <= fechaLimite)
+                {
+                    Label lbl_LoteProximoAVencer = new Label();
+                    lbl_LoteProximoAVencer.Text = $"Producto: {lote.NombreProducto} - Vence el: {lote.FechaVencimiento.Value.ToShortDateString()} - Cantidad: {lote.Cantidad}";
+                    lbl_LoteProximoAVencer.AutoSize = true;
+                    flp_LotesProntoAVencer.Controls.Add(lbl_LoteProximoAVencer);
+                }
+            }
+        }
         private void FormGestionarReportes_Load(object sender, EventArgs e)
         {
             CargarListaLotesMemoriaFiltrada();
@@ -162,6 +176,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             GenerarReporteStockActualPorRubro();
             GenerarReporteIngresosPorProveedor();
             GenerarReporteBajoStockProductos();
+            GenerarReporteLotesProductosProntoAVencer();
         }
     }
 }

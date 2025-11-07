@@ -13,7 +13,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         public int IdRubro { get; set; }
         public string NombreProducto { get; set; }
         public string DescripcionProducto { get; set; }
-        public decimal PrecioUnitarioProducto { get; set; }
+        public decimal PrecioVentaProducto { get; set; }
         public string RubroProducto { get; set; }
         public int StockProducto { get; set; }
         public bool Activo { get; set; } = true;

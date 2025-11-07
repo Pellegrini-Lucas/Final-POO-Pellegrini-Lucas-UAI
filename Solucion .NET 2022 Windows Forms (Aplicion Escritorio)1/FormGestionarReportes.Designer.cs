@@ -36,6 +36,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.flp_BajoStockProductos = new System.Windows.Forms.FlowLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
+            this.flp_LotesProntoAVencer = new System.Windows.Forms.FlowLayoutPanel();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // flp_StockActualPorProducto
@@ -106,11 +108,30 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Productos Con Poco Stock (Stock < 25)";
             // 
+            // flp_LotesProntoAVencer
+            // 
+            this.flp_LotesProntoAVencer.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flp_LotesProntoAVencer.Location = new System.Drawing.Point(219, 258);
+            this.flp_LotesProntoAVencer.Name = "flp_LotesProntoAVencer";
+            this.flp_LotesProntoAVencer.Size = new System.Drawing.Size(200, 209);
+            this.flp_LotesProntoAVencer.TabIndex = 6;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(216, 242);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(169, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Lotes Pronto A Vencer (1 semana)";
+            // 
             // FormGestionarReportes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 500);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.flp_LotesProntoAVencer);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.flp_BajoStockProductos);
             this.Controls.Add(this.label3);
@@ -137,5 +158,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.FlowLayoutPanel flp_BajoStockProductos;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.FlowLayoutPanel flp_LotesProntoAVencer;
+        private System.Windows.Forms.Label label5;
     }
 }

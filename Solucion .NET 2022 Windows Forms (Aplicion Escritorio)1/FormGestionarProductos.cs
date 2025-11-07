@@ -26,43 +26,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             InitializeComponent();
         }
-        private void CargarCmbRubros()
-        {
-            CargarListaRubrosMemoriaFiltrada();
-            foreach (Rubro rubro in listaRubrosMemoriaFiltrada)
-            {
-                cmb_RubroProducto.Items.Add(rubro.NombreRubro);
-            }
-        }
-        private void dgv_BancoProductos_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgv_BancoProductos.SelectedRows.Count > 0)
-            {
-                    if (dgv_BancoProductos.SelectedRows[0].Cells[0].Value == null) return;
-                    int idProductoSeleccionado = (int)dgv_BancoProductos.SelectedRows[0].Cells[0].Value;
-                    Producto productoSeleccionado = listaProductosMemoria.FirstOrDefault(p => p.IdProducto == idProductoSeleccionado);
-                    if (productoSeleccionado != null)
-                    {
-                        txt_NombreProducto.Text = productoSeleccionado.NombreProducto;
-                        txt_DescripcionProducto.Text = productoSeleccionado.DescripcionProducto;
-                        txt_PrecioUnitarioProducto.Text = productoSeleccionado.PrecioUnitarioProducto.ToString();
-                        cmb_RubroProducto.Text = productoSeleccionado.RubroProducto;
-                        txt_StockProducto.Text = productoSeleccionado.StockProducto.ToString();
-                    }
-            }
-        }
-        private int GenerarIdProducto()
-        {
-            if (listaProductosMemoria.Count == 0)
-                return 1;
-            return listaProductosMemoria.Max(p => p.IdProducto) + 1;
-        }
-        private int GenerarIdLote()
-        {
-            if (listaLotesMemoria.Count == 0)
-                return 1;
-            return listaLotesMemoria.Max(p => p.IdLote) + 1;
-        }
         private void CargarListaProductosMemoriaFiltrada()
         {
             if (!File.Exists("productos.json"))
@@ -75,6 +38,19 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             else
                 listaProductosMemoria = JsonSerializer.Deserialize<List<Producto>>(jsonString);
             listaProductosMemoriaFiltrada = listaProductosMemoria.Where(p => p.Activo == true).ToList();
+        }
+        private void CargarListaRubrosMemoriaFiltrada()
+        {
+            if (!File.Exists("Rubros.json"))
+            {
+                File.Create("Rubros.json").Close();
+            }
+            string jsonString = File.ReadAllText("Rubros.json");
+            if (string.IsNullOrWhiteSpace(jsonString))
+                listaRubrosMemoria = new List<Rubro>();
+            else
+                listaRubrosMemoria = JsonSerializer.Deserialize<List<Rubro>>(jsonString);
+            listaRubrosMemoriaFiltrada = listaRubrosMemoria.Where(p => p.Activo == true).ToList();
         }
         private void CargarListaLotesMemoria()
         {
@@ -90,18 +66,42 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             else
                 listaLotesMemoria = JsonSerializer.Deserialize<List<Lotes>>(jsonString);
         }
-        private void CargarListaRubrosMemoriaFiltrada()
+        private void CargarCmbRubros()
         {
-            if (!File.Exists("Rubros.json"))
+            CargarListaRubrosMemoriaFiltrada();
+            foreach (Rubro rubro in listaRubrosMemoriaFiltrada)
             {
-                File.Create("Rubros.json").Close();
+                cmb_RubroProducto.Items.Add(rubro.NombreRubro);
             }
-            string jsonString = File.ReadAllText("Rubros.json");
-            if (string.IsNullOrWhiteSpace(jsonString))
-                listaRubrosMemoria = new List<Rubro>();
-            else
-                listaRubrosMemoria = JsonSerializer.Deserialize<List<Rubro>>(jsonString);
-            listaRubrosMemoriaFiltrada = listaRubrosMemoria.Where(p => p.Activo == true).ToList();
+        }
+        private int GenerarIdProducto()
+        {
+            if (listaProductosMemoria.Count == 0)
+                return 1;
+            return listaProductosMemoria.Max(p => p.IdProducto) + 1;
+        }
+        private int GenerarIdLote()
+        {
+            if (listaLotesMemoria.Count == 0)
+                return 1;
+            return listaLotesMemoria.Max(p => p.IdLote) + 1;
+        }
+        private void dgv_BancoProductos_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgv_BancoProductos.SelectedRows.Count > 0)
+            {
+                    if (dgv_BancoProductos.SelectedRows[0].Cells[0].Value == null) return;
+                    int idProductoSeleccionado = (int)dgv_BancoProductos.SelectedRows[0].Cells[0].Value;
+                    Producto productoSeleccionado = listaProductosMemoria.FirstOrDefault(p => p.IdProducto == idProductoSeleccionado);
+                    if (productoSeleccionado != null)
+                    {
+                        txt_NombreProducto.Text = productoSeleccionado.NombreProducto;
+                        txt_DescripcionProducto.Text = productoSeleccionado.DescripcionProducto;
+                        txt_PrecioCompraProducto.Text = productoSeleccionado.PrecioVentaProducto.ToString();
+                        cmb_RubroProducto.Text = productoSeleccionado.RubroProducto;
+                        txt_StockProducto.Text = productoSeleccionado.StockProducto.ToString();
+                    }
+            }
         }
         private void txt_BuscarNombreProducto_TextChanged(object sender, EventArgs e)
         {
@@ -142,8 +142,8 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             dgv_BancoProductos.Columns.Add("DescripcionProducto", "Descripcion");
             dgv_BancoProductos.Columns["DescripcionProducto"].DataPropertyName = "DescripcionProducto";
 
-            dgv_BancoProductos.Columns.Add("PrecioUnitarioProducto", "Precio Unitario");
-            dgv_BancoProductos.Columns["PrecioUnitarioProducto"].DataPropertyName = "PrecioUnitarioProducto";
+            dgv_BancoProductos.Columns.Add("PrecioVentaProducto", "Precio de Venta");
+            dgv_BancoProductos.Columns["PrecioVentaProducto"].DataPropertyName = "PrecioVentaProducto";
 
             dgv_BancoProductos.Columns.Add("RubroProducto", "Rubro");
             dgv_BancoProductos.Columns["RubroProducto"].DataPropertyName = "RubroProducto";
@@ -158,7 +158,7 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             txt_NombreProducto.Text = "";
             txt_DescripcionProducto.Text = "";
-            txt_PrecioUnitarioProducto.Text = "";
+            txt_PrecioCompraProducto.Text = "";
             cmb_RubroProducto.Text = "";
             txt_StockProducto.Text = "";
         }
@@ -175,6 +175,8 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 dtp_VencimientoStockIngresanteEgresante.Enabled = false;
             }
         }
+
+
         private void FormGestionarProductos_Load(object sender, EventArgs e)
         {
             LimpiarCampos();
@@ -186,9 +188,8 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         }
         private void btn_AgregarProductos_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txt_NombreProducto.Text) || string.IsNullOrEmpty(txt_PrecioUnitarioProducto.Text) || string.IsNullOrEmpty(txt_StockProducto.Text) || string.IsNullOrEmpty(txt_DescripcionProducto.Text) || cmb_RubroProducto.SelectedItem == null)
-            {
-                //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto   
+            if (string.IsNullOrEmpty(txt_NombreProducto.Text) || string.IsNullOrEmpty(txt_PrecioCompraProducto.Text) || string.IsNullOrEmpty(txt_StockProducto.Text) || string.IsNullOrEmpty(txt_DescripcionProducto.Text) || cmb_RubroProducto.SelectedItem == null)
+            { 
                 MessageBox.Show("todos los campos deben estar completos");
                 return;
             }
@@ -204,12 +205,13 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             nuevoProducto.RubroProducto = cmb_RubroProducto.Text;
             try
             {
-                if (decimal.Parse(txt_PrecioUnitarioProducto.Text) < 0 || decimal.Parse(txt_PrecioUnitarioProducto.Text) == 0)
+                if (decimal.Parse(txt_PrecioCompraProducto.Text) < 0 || decimal.Parse(txt_PrecioCompraProducto.Text) == 0)
                 {
                     MessageBox.Show("El precio unitario no puede ser un numero negativo o cero");
                     return;
                 }
-                nuevoProducto.PrecioUnitarioProducto = decimal.Parse(txt_PrecioUnitarioProducto.Text);
+                decimal precioVenta = decimal.Parse(txt_PrecioCompraProducto.Text) * 1.5m;
+                nuevoProducto.PrecioVentaProducto = precioVenta;
             }
             catch 
             {
@@ -271,9 +273,8 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
         {
             if (dgv_BancoProductos.SelectedRows!=null)
             {
-                if (string.IsNullOrEmpty(txt_NombreProducto.Text) || string.IsNullOrEmpty(txt_PrecioUnitarioProducto.Text) || string.IsNullOrEmpty(txt_StockProducto.Text) || string.IsNullOrEmpty(txt_DescripcionProducto.Text) || cmb_RubroProducto.SelectedItem == null)
+                if (string.IsNullOrEmpty(txt_NombreProducto.Text) || string.IsNullOrEmpty(txt_PrecioCompraProducto.Text) || string.IsNullOrEmpty(txt_StockProducto.Text) || string.IsNullOrEmpty(txt_DescripcionProducto.Text) || cmb_RubroProducto.SelectedItem == null)
                 {
-                    //en algun momento estaria bueno poner un lbl arriba de cada textbox que se ilumine rojo cuando un txt este incompleto
                     MessageBox.Show("todos los campos deben estar completos");
                     return;
                 }
@@ -291,12 +292,13 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                     productoSeleccionado.RubroProducto = cmb_RubroProducto.Text;
                     try
                     {
-                        if (decimal.Parse(txt_PrecioUnitarioProducto.Text) < 0 || decimal.Parse(txt_PrecioUnitarioProducto.Text) == 0)
+                        if (decimal.Parse(txt_PrecioCompraProducto.Text) < 0 || decimal.Parse(txt_PrecioCompraProducto.Text) == 0)
                         {
                             MessageBox.Show("El precio unitario no puede ser un numero negativo o cero");
                             return;
                         }
-                            productoSeleccionado.PrecioUnitarioProducto = decimal.Parse(txt_PrecioUnitarioProducto.Text);
+                        decimal precioVenta = decimal.Parse(txt_PrecioCompraProducto.Text) * 1.5m;
+                        productoSeleccionado.PrecioVentaProducto = precioVenta;
                     }
                     catch
                     {
@@ -340,13 +342,6 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
                 }
             }
         }
-
-        private void btn_Pruebas_Click(object sender, EventArgs e)
-        {
-            CargarListaLotesMemoria();
-            MessageBox.Show($"{DateTime.Today.Date}");
-        }
-
         private void rbt_Perecedero_CheckedChanged(object sender, EventArgs e)
         {
             GestorControlesVencimiento();

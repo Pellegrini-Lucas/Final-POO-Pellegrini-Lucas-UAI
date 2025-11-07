@@ -120,11 +120,17 @@ namespace Solucion.NET_2022_Windows_Forms__Aplicion_Escritorio_1
             dgv_IngresosEgresos.Columns.Add("Movimiento", "Movimiento");
             dgv_IngresosEgresos.Columns["Movimiento"].DataPropertyName = "TipoMovimiento";
 
+            dgv_IngresosEgresos.Columns.Add("MotivoEgreso", "Motivo Egreso");
+            dgv_IngresosEgresos.Columns["MotivoEgreso"].DataPropertyName = "MotivoEgreso";
+
             dgv_IngresosEgresos.Columns.Add("Proveedor", "Proveedor");
             dgv_IngresosEgresos.Columns["Proveedor"].DataPropertyName = "NombreProveedor";
 
             dgv_IngresosEgresos.Columns.Add("FechaMovimiento", "Fecha");
             dgv_IngresosEgresos.Columns["FechaMovimiento"].DataPropertyName = "FechaMovimiento";
+
+            dgv_IngresosEgresos.Columns.Add("FechaVencimiento", "Vencimiento");
+            dgv_IngresosEgresos.Columns["FechaVencimiento"].DataPropertyName = "FechaVencimiento";
 
             dgv_IngresosEgresos.DataSource = null;
             dgv_IngresosEgresos.DataSource = listaLotesMemoriaFiltrada;
